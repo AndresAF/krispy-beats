@@ -75,9 +75,9 @@ input[type='range']::-moz-range-thumb {
 .playhead-col { position: relative; }
 .playhead-col::before {
   content: '';
-  position: absolute; top: -4px; left: 50%; transform: translateX(-50%);
-  width: 2px; height: calc(100% + 8px);
-  background: rgba(37,99,235,0.45); border-radius: 1px;
+  position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
+  width: 2px; height: calc(100% + 16px);
+  background: rgba(37,99,235,0.55); border-radius: 2px;
   pointer-events: none; z-index: 10;
 }
 

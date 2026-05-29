@@ -33,7 +33,7 @@ export const StepButton = memo(function StepButton({
           : `0 0 5px ${color}70`,
       }
     : playing
-    ? { backgroundColor: 'rgba(206,17,38,0.12)', boxShadow: '0 0 4px rgba(206,17,38,0.2)' }
+    ? { backgroundColor: 'rgba(37,99,235,0.13)', boxShadow: 'inset 0 0 0 1px rgba(37,99,235,0.3)' }
     : {}
 
   return (

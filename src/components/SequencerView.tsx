@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useSequencerStore } from '../store/sequencerStore'
 import type { ChannelId } from '../types'
@@ -7,11 +8,18 @@ import { BpmControl } from './controls/BpmControl'
 import { PatternControls } from './controls/PatternControls'
 import { MasterVolume } from './controls/MasterVolume'
 import { PatternBank } from './modals/PatternBank'
+import { audioEngine } from '../engine/AudioEngine'
 
 export function SequencerView() {
-  const { patterns, activePatternId, selectedChannelId, setSelectedChannel, playbackState, currentStep } = useSequencerStore()
+  const { patterns, activePatternId, selectedChannelId, setSelectedChannel, playbackState, currentStep, setCurrentStep } = useSequencerStore()
   const pattern = patterns[activePatternId]
   const isPlaying = playbackState === 'playing'
+  // Show playhead when playing OR paused — only hide it when fully stopped
+  const isActive = playbackState !== 'stopped'
+
+  useEffect(() => {
+    return audioEngine.onStep((step) => setCurrentStep(step))
+  }, [setCurrentStep])
 
   return (
     <div className="flex flex-col gap-4 p-4 max-w-[1400px] mx-auto w-full">
@@ -45,7 +53,7 @@ export function SequencerView() {
             key={id}
             channel={pattern.channels[id as ChannelId]}
             currentStep={currentStep}
-            isPlaying={isPlaying}
+            isPlaying={isActive}
             isSelected={selectedChannelId === id}
             onSelect={() => setSelectedChannel(id as ChannelId)}
           />
@@ -57,7 +65,7 @@ export function SequencerView() {
         <div className="flex-1 px-3">
           <div className="h-1 bg-surface-200 rounded-full overflow-hidden">
             <motion.div className="h-full rounded-full bg-primary"
-              animate={{ width: isPlaying ? `${((currentStep + 1) / pattern.patternLength) * 100}%` : '0%' }}
+              animate={{ width: isActive ? `${((currentStep + 1) / pattern.patternLength) * 100}%` : '0%' }}
               transition={{ duration: 0.05 }} />
           </div>
         </div>
